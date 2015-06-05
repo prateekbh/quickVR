@@ -107,6 +107,7 @@
         }
 
         makeShelf();
+          categoryBoard();
 
         displayLaserTag();
       }
@@ -258,6 +259,31 @@
         camera.add(circle);
         circle.position.set(0, 5, -50);
       }
+
+      function categoryBoard() {
+
+          // material
+          var material = new THREE.MeshLambertMaterial({
+              map: THREE.ImageUtils.loadTexture('images/personal_care1.png')
+          });
+
+          var text = "Personal";
+          var labelgeo = new THREE.TextGeometry(text, {
+              size: text.size,
+              height: text.size / 2,
+              font: 'helvetiker'
+          });
+          labelgeo.computeBoundingSphere();
+
+          // cube
+          var cube = new THREE.Mesh(new THREE.CubeGeometry(60, 30, 30), material);
+          cube.overdraw = true;
+          cube.position.set(0, 110, 0);
+          scene.add(cube);
+
+
+      }
+
 
     </script>
   </body>
