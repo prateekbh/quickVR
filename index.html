@@ -37,6 +37,10 @@
           effect,
           controls,
           clock,
+          forwardTilted,
+          backwardTilted,
+          leftTilted,
+          rightTilted,
           y=0;
       var light,camera;
 
@@ -55,6 +59,8 @@
         container.appendChild(element);
 
         effect = new THREE.StereoEffect(renderer);
+
+        window.ondeviceorientation=callback;
 
         
         var z=0;
@@ -99,6 +105,66 @@
         makeShelf();
       }
 
+      function callback(event){
+        //console.log("orientation gamma:", event.gamma, "beta", event.beta, "alpha", event.alpha);
+        var threshold = 10;
+        if(event.gamma > threshold) {
+          moveForward()
+          if(forwardTilted == 1) {
+            // do nothing
+          }
+          else {
+            forwardTilted = 1;
+          }
+        }
+        else if(forwardTilted == 1) {
+          forwardTilted = 0;
+        }
+        if(event.gamma < -threshold) {
+          moveBackward()
+          if(backwardTilted == 1) {
+            // do nothing
+          }
+          else {
+            backwardTilted = 1;
+          }
+        }
+        else if(backwardTilted == 1) {
+          backwardTilted = 0;
+        }
+        if(event.beta > threshold) {
+          if(rightTilted == 1) {
+            // do nothing
+          }
+          else {
+            console.log("Right Tilt");
+            rightTilted = 1;
+          }
+        }
+        else if(rightTilted == 1) {
+          rightTilted = 0;
+        }
+        if(event.beta < -threshold) {
+          if(leftTilted == 1) {
+            // do nothing
+          }
+          else {
+            console.log("Left Tilt");
+            leftTilted = 1;
+          }
+        }
+        else if(leftTilted == 1) {
+          leftTilted = 0;
+        }
+      }
+
+      function moveForward() {
+        camera.translateZ(-10);
+      }
+
+      function moveBackward() {
+        camera.translateZ(10);
+      }
       
       function animate() {
         
