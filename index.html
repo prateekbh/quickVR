@@ -213,24 +213,50 @@
 
         var shelfHeight=100, shelfWidth=50;
 
-        var shelf=new THREE.Shape();
+        var rightShelfShape=new THREE.Shape();
+        rightShelfShape.moveTo( 0,0 );
+        rightShelfShape.lineTo( shelfWidth, 0 );
+        rightShelfShape.lineTo( shelfWidth, shelfHeight );
+        rightShelfShape.lineTo( 0, shelfHeight );
+        rightShelfShape.lineTo( 0, shelfHeight-10 );
+        rightShelfShape.lineTo( shelfWidth-20, shelfHeight-10 );
+        rightShelfShape.lineTo( shelfWidth-20, 50 );
+        rightShelfShape.lineTo( 0, 50 );
+        rightShelfShape.lineTo( 0,0 );
 
+        var leftShelfShape=new THREE.Shape();
+        leftShelfShape.moveTo( 0,0 );
+        leftShelfShape.lineTo( -shelfWidth, 0 );
+        leftShelfShape.lineTo( -shelfWidth, shelfHeight );
+        leftShelfShape.lineTo( 0, shelfHeight );
+        leftShelfShape.lineTo( 0, shelfHeight-10 );
+        leftShelfShape.lineTo( -shelfWidth+20, shelfHeight-10 );
+        leftShelfShape.lineTo( -shelfWidth+20, 50 );
+        leftShelfShape.lineTo( 0, 50 );
+        leftShelfShape.lineTo( 0,0 );
 
-        shelf.moveTo( 0,0 );
-        shelf.lineTo( shelfWidth, 0 );
-        shelf.lineTo( shelfWidth, shelfHeight );
-        shelf.lineTo( 0, shelfHeight );
-        shelf.lineTo( 0, shelfHeight-10 );
-        shelf.lineTo( shelfWidth-20, shelfHeight-10 );
-        shelf.lineTo( shelfWidth-20, 50 );
-        shelf.lineTo( 0, 50 );
-        shelf.lineTo( 0,0 );
+        var extrusionSettings = {
+          size: 30, height: 4, curveSegments: 3,
+          bevelThickness: 1, bevelSize: 2, bevelEnabled: false,
+          material: 0, extrudeMaterial: 1
+        };
 
-        var shelfGeom = new THREE.ShapeGeometry( shelf );
-        var shelfMesh = new THREE.Mesh( shelfGeom, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) ;   
-        shelfMesh.position.set(50,0,-80);
+        var rightShelfGeom = new THREE.ExtrudeGeometry( rightShelfShape, extrusionSettings );
+        var leftShelfGeom = new THREE.ExtrudeGeometry( leftShelfShape, extrusionSettings );
 
-        scene.add( shelfMesh );
+        var materialFront = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+        var materialSide = new THREE.MeshBasicMaterial( { color: 0xdddddd } );
+        var materialArray = [ materialFront, materialSide ];
+        var shelfMaterial = new THREE.MeshFaceMaterial(materialArray);
+
+        var rightShelf = new THREE.Mesh( rightShelfGeom, shelfMaterial );
+        rightShelf.position.set(50,0,-80);
+
+        var leftShelf = new THREE.Mesh( leftShelfGeom, shelfMaterial );
+        leftShelf.position.set(-50,0,-80);
+
+        scene.add( rightShelf );
+        scene.add( leftShelf );
       }
 
     </script>
