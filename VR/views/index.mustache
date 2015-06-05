@@ -100,16 +100,22 @@
 
         window.onkeydown=function(e){
           if(e.keyCode==38){
-            camera.translateZ(-10);
+            moveForward();
           }
           else if(e.keyCode==40){
-            camera.translateZ(10); 
+            moveBackward();
+          }
+          else if (e.keyCode == 37) {   // left arrow key
+            camera.rotation.y = camera.rotation.y + (5 * (Math.PI / 180));
+          }
+          else if (e.keyCode == 39) {   // right arrow key
+            camera.rotation.y = camera.rotation.y - (5 * (Math.PI / 180));
           }
         }
 
-        $.get("/api/browse?cid=beverages",function(data){
+        $.get("/api/browse?cid=beverages&pno=1",function(data){
           ShelfManager.makeShelf("beverages",data);
-        })
+        });
 
         
       }
@@ -169,6 +175,19 @@
 
       function moveForward() {
         camera.translateZ(-10);
+        var index=Math.ceil(camera.position.x/150);
+        if(index>0){
+          var category=ShelfManager.shelves.categories[index-1];
+          var shelf=ShelfManager.shelves[category];
+          var spaceLeft=(Math.round(camera.position.z)-shelf.endZ);
+          if(spaceLeft<60&&spaceLeft>50){
+            $.get("/api/browse?cid="+shelf.category+"&pno="+((shelf.products.length/10)+1),function(data){
+              ShelfManager.makeShelf(shelf.category,data);
+            });
+          }
+        }
+        
+
       }
 
       function moveBackward() {
