@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 
+var apiRouter = require('./routes/api.js');
 var routes = require('./routes/index');
 var staticRouter = require('./routes/statics.js');
 var imgRouter = require('./routes/imgs.js');
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/public",staticRouter);
 app.use('/imgs', imgRouter);
+app.use("/api",apiRouter);
 app.use('/', routes);
 
 
