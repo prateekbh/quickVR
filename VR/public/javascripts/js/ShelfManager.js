@@ -24,6 +24,8 @@ var ShelfManager = {
         for (var prod in data) {
             this.shelves[cid].products.push(prod);
         }
+
+        this.renderProducts(this.shelves[cid],data);
     },
 
     makeShelf:function(cid,data){
@@ -76,14 +78,9 @@ var ShelfManager = {
 
     	scene.add( rightShelf );
     	scene.add( leftShelf );
+    },
 
-
-    	shelves[cid]=shelves[cid]||{};
-    	shelves[cid].products=shelves[cid].products||[];
-    	data=JSON.parse(data);
-
-    	for(var index=0;index<data.length;index++){
-    	  shelves[cid].products.push(data[index]);
-    	}
+    renderProducts:function(shelf,data){
+        moduleProduct.arrangeProduct(data, shelf);
     }
 }
