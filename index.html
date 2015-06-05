@@ -109,6 +109,8 @@
         }
 
         makeShelf();
+
+        displayLaserTag();
       }
 
       function callback(event){
@@ -250,6 +252,17 @@
 
         scene.add( rightShelf );
         scene.add( leftShelf );
+      }
+
+      function displayLaserTag() {
+        var material = new THREE.LineBasicMaterial({ color: 0xff0000 }); 
+        var radius = 3; 
+        var segments = 32; 
+        var circleGeometry = new THREE.CircleGeometry( radius, segments ); 
+        var circle = new THREE.Line( circleGeometry, material );
+        camera.add(circle);
+        circle.position.set(0, 0, -50); 
+        // scene.add( circle );
       }
 
     </script>
