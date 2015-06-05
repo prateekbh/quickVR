@@ -5,24 +5,31 @@ var ShelfManager = {
     },
 
     addShelf: function(cid, data) {
+        var newCat=false;
         if (!this.shelves[cid]) {
             this.shelves.categories.push(cid);
             this.shelves[cid] = this.shelves[cid] || {};
+            this.shelves[cid].x=this.shelves.totalCount*180;
             this.shelves[cid].products = this.shelves[cid].products || [];
             this.shelves[cid].endZ=-100;
             this.shelves[cid].category=cid;
+            newCat=true;
         }
         else{
-            this.shelves[cid].endZ=this.shelves[cid].endZ-110;   
+            this.shelves[cid].endZ=this.shelves[cid].endZ-110;
         }
 
-        this.shelves[cid].x=this.shelves.totalCount*50;
+        
         var cidShelfSet=this.shelves[cid].products.length/10;
         this.shelves[cid].y=(-1*((cidShelfSet)*100+(10*cidShelfSet)))-100;
         
 
         for (var prod in data) {
             this.shelves[cid].products.push(prod);
+        }
+
+        if(newCat==true){
+            this.shelves.totalCount=this.shelves.totalCount+1;
         }
     },
 
