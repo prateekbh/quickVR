@@ -26,6 +26,7 @@
     <script src="/public/javascripts/js/DeviceOrientationControls.js"></script>
     <script src="/public/javascripts/js/OrbitControls.js"></script>
     <script src="/public/javascripts/js/helvetiker_regular.typeface.js"></script>
+    <script src="/public/javascripts/js/ShelfManager.js"></script>
     <script src="https://timezonedb.googlecode.com/files/timezonedb.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.6/zepto.min.js"></script>
 
@@ -107,7 +108,7 @@
         }
 
         $.get("/api/browse?cid=beverages",function(data){
-          makeShelf("beverages",data);
+          ShelfManager.makeShelf("beverages",data);
         })
 
         
@@ -197,68 +198,6 @@
 
       function render(dt) {
         effect.render(scene, camera);
-      }
-
-
-      function makeShelf(cid,data){
-
-        var shelfHeight=100, shelfWidth=50;
-
-        var rightShelfShape=new THREE.Shape();
-        rightShelfShape.moveTo( 0,0 );
-        rightShelfShape.lineTo( shelfWidth, 0 );
-        rightShelfShape.lineTo( shelfWidth, shelfHeight );
-        rightShelfShape.lineTo( 0, shelfHeight );
-        rightShelfShape.lineTo( 0, shelfHeight-10 );
-        rightShelfShape.lineTo( shelfWidth-20, shelfHeight-10 );
-        rightShelfShape.lineTo( shelfWidth-20, 50 );
-        rightShelfShape.lineTo( 0, 50 );
-        rightShelfShape.lineTo( 0,0 );
-
-        var leftShelfShape=new THREE.Shape();
-        leftShelfShape.moveTo( 0,0 );
-        leftShelfShape.lineTo( -shelfWidth, 0 );
-        leftShelfShape.lineTo( -shelfWidth, shelfHeight );
-        leftShelfShape.lineTo( 0, shelfHeight );
-        leftShelfShape.lineTo( 0, shelfHeight-10 );
-        leftShelfShape.lineTo( -shelfWidth+20, shelfHeight-10 );
-        leftShelfShape.lineTo( -shelfWidth+20, 50 );
-        leftShelfShape.lineTo( 0, 50 );
-        leftShelfShape.lineTo( 0,0 );
-
-        var extrusionSettings = {
-          size: 30, height: 4, curveSegments: 3,
-          bevelThickness: 1, bevelSize: 2, bevelEnabled: false,
-          material: 0, extrudeMaterial: 1
-        };
-
-        var rightShelfGeom = new THREE.ExtrudeGeometry( rightShelfShape, extrusionSettings );
-        var leftShelfGeom = new THREE.ExtrudeGeometry( leftShelfShape, extrusionSettings );
-
-        var materialFront = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-        var materialSide = new THREE.MeshBasicMaterial( { color: 0xdddddd } );
-        var materialArray = [ materialFront, materialSide ];
-        var shelfMaterial = new THREE.MeshFaceMaterial(materialArray);
-
-        var rightShelf = new THREE.Mesh( rightShelfGeom, shelfMaterial );
-        rightShelf.position.set(50,0,-80);
-
-        var leftShelf = new THREE.Mesh( leftShelfGeom, shelfMaterial );
-        leftShelf.position.set(-50,0,-80);
-
-        scene.add( rightShelf );
-        scene.add( leftShelf );
-
-
-        shelves[cid]=shelves[cid]||{};
-        shelves[cid].products=shelves[cid].products||[];
-        data=JSON.parse(data);
-
-        for(var index=0;index<data.length;index++){
-          shelves[cid].products.push(data[index]);
-        }
-
-        
       }
 
     </script>
