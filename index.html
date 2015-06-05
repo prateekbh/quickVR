@@ -94,6 +94,8 @@
             camera.translateZ(10); 
           }
         }
+
+        makeShelf();
       }
 
       
@@ -124,6 +126,15 @@
 
       function render(dt) {
         effect.render(scene, camera);
+      }
+
+
+      function makeShelf(){
+        var geometry = new THREE.BoxGeometry( 50, 100, 144 );
+        var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+        window.cube = new THREE.Mesh( geometry, material );
+        cube.position.set(150,0,-80);
+        scene.add( cube );
       }
 
     </script>
