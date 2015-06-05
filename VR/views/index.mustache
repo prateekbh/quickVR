@@ -44,9 +44,12 @@
           backwardTilted,
           leftTilted,
           rightTilted,
+          chIcon,
           y=0;
       var light,camera;
 
+      var raycaster = new THREE.Raycaster();
+      var crosshairVector= new THREE.Vector2();
 
       var shelves={};
 
@@ -105,23 +108,21 @@
             moveBackward();
           }
           else if (e.keyCode == 37) {   // left arrow key
-            camera.rotation.y = camera.rotation.y + (5 * (Math.PI / 180));
+            turnLeft();
           }
           else if (e.keyCode == 39) {   // right arrow key
-            camera.rotation.y = camera.rotation.y - (5 * (Math.PI / 180));
+            turnRight();
           }
         }
 
         $.get("/api/browse?cid=beverages&pno=1",function(data){
           ShelfManager.makeShelf("beverages",data);
-        });
-
-        $.get("/api/browse?cid=branded food&pno=1",function(data){
-          ShelfManager.makeShelf("branded food",data);
-        });
-
-        $.get("/api/browse?cid=grocery & staples&pno=1",function(data){
-          ShelfManager.makeShelf("grocery & staples",data);
+          $.get("/api/browse?cid=branded food&pno=1",function(data){
+            ShelfManager.makeShelf("branded food",data);
+            $.get("/api/browse?cid=grocery & staples&pno=1",function(data){
+              ShelfManager.makeShelf("grocery & staples",data);
+            });
+          });
         });
 
         displayLaserTag();
@@ -151,6 +152,14 @@
         camera.translateZ(10);
       }
       
+      function turnLeft(){
+        camera.rotation.y = camera.rotation.y + (5 * (Math.PI / 180));
+      }
+
+      function turnRight(){
+        camera.rotation.y = camera.rotation.y - (5 * (Math.PI / 180));
+      }
+
       function animate() {
         requestAnimationFrame(animate);
         update(clock.getDelta());
@@ -173,6 +182,19 @@
       }
 
       function render(dt) {
+
+        crosshairVector.x = camera.position.x;
+        crosshairVector.y = 55;
+              
+        raycaster.setFromCamera( crosshairVector, camera );
+
+
+        var objs=raycaster.intersectObjects(scene.children);
+        if(objs.length>0){
+          console.log(objs);
+          debugger;
+        }
+
         effect.render(scene, camera);
       }
 
@@ -181,10 +203,9 @@
         var radius = 3; 
         var segments = 32; 
         var circleGeometry = new THREE.CircleGeometry( radius, segments ); 
-        var circle = new THREE.Line( circleGeometry, material );
-        camera.add(circle);
-        circle.position.set(0, 0, -50); 
-        // scene.add( circle );
+        chIcon = new THREE.Line( circleGeometry, material );
+        camera.add(chIcon);
+        chIcon.position.set(0, 5, -50); 
       }
 
     </script>
