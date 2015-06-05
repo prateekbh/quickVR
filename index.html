@@ -61,7 +61,6 @@
         effect = new THREE.StereoEffect(renderer);
 
         window.ondeviceorientation=callback;
-
         
         var z=0;
         var light = new THREE.AmbientLight( 0xcccccc ); // soft white light
@@ -86,20 +85,6 @@
         var floor = new THREE.Mesh(geometry, floorMaterial);
         floor.rotation.x = -Math.PI / 2;
         scene.add(floor);
-
-
-
-
-        var material = new THREE.MeshLambertMaterial({
-          map: THREE.ImageUtils.loadTexture('textures/AAPHEGZQJITOEVCT_144.jpg')
-        });
-                
-        // cube
-        var cube = new THREE.Mesh(new THREE.BoxGeometry(72, 72, 72), material);
-        cube.overdraw = true;
-        //cube.rotation.x = Math.PI * 0.1;
-        scene.add(cube);
-
 
         clock = new THREE.Clock();
 
@@ -188,8 +173,6 @@
       }
       
       function animate() {
-        
-
         requestAnimationFrame(animate);
         update(clock.getDelta());
         render(clock.getDelta());
@@ -218,7 +201,6 @@
 
 
       function makeShelf(){
-
         var shelfHeight=100, shelfWidth=50;
 
         var rightShelfShape=new THREE.Shape();
@@ -274,8 +256,7 @@
         var circleGeometry = new THREE.CircleGeometry( radius, segments ); 
         var circle = new THREE.Line( circleGeometry, material );
         camera.add(circle);
-        circle.position.set(0, 0, -50); 
-        // scene.add( circle );
+        circle.position.set(0, 5, -50);
       }
 
     </script>
