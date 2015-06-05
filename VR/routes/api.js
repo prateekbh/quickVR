@@ -18,7 +18,7 @@ var request = require('request');
 
 /* Browse Proxy. */
 router.get('/browse', function(req, res, next) {
-    var url='http://fquick-catalog.nm.flipkart.com/catalog/search/category/' + req.query.cid+"?page_size=10";
+    var url='http://fquick-catalog.nm.flipkart.com/catalog/search/category/' + req.query.cid+"?page_size=10&page_number="+req.query.pno;
     request(url, function(error, response, body) {
         if (!error && response.statusCode == 200) {
             res.send(body);
