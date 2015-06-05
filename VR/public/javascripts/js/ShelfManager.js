@@ -11,17 +11,17 @@ var ShelfManager = {
             this.shelves[cid] = this.shelves[cid] || {};
             this.shelves[cid].x=this.shelves.totalCount*180;
             this.shelves[cid].products = this.shelves[cid].products || [];
-            this.shelves[cid].endZ=-100;
+            this.shelves[cid].endZ=-260;
             this.shelves[cid].category=cid;
             newCat=true;
         }
         else{
-            this.shelves[cid].endZ=this.shelves[cid].endZ-110;
+            this.shelves[cid].endZ=this.shelves[cid].endZ-270;
         }
 
         
         var cidShelfSet=this.shelves[cid].products.length/10;
-        this.shelves[cid].y=(-1*((cidShelfSet)*100+(10*cidShelfSet)))-100;
+        this.shelves[cid].y=(-1*((cidShelfSet)*260+(10*cidShelfSet)))-260;
         
 
         for (var prod in data) {
@@ -31,7 +31,7 @@ var ShelfManager = {
         if(newCat==true){
             this.shelves.totalCount=this.shelves.totalCount+1;
         }
-        
+
         this.renderProducts(this.shelves[cid],data);
     },
 
@@ -48,8 +48,8 @@ var ShelfManager = {
     	rightShelfShape.lineTo( 0, shelfHeight );
     	rightShelfShape.lineTo( 0, shelfHeight-10 );
     	rightShelfShape.lineTo( shelfWidth-20, shelfHeight-10 );
-    	rightShelfShape.lineTo( shelfWidth-20, 50 );
-    	rightShelfShape.lineTo( 0, 50 );
+    	rightShelfShape.lineTo( shelfWidth-20, 20 );
+    	rightShelfShape.lineTo( 0, 20 );
     	rightShelfShape.lineTo( 0,0 );
 
     	var leftShelfShape=new THREE.Shape();
@@ -59,14 +59,14 @@ var ShelfManager = {
     	leftShelfShape.lineTo( 0, shelfHeight );
     	leftShelfShape.lineTo( 0, shelfHeight-10 );
     	leftShelfShape.lineTo( -shelfWidth+20, shelfHeight-10 );
-    	leftShelfShape.lineTo( -shelfWidth+20, 50 );
-    	leftShelfShape.lineTo( 0, 50 );
+    	leftShelfShape.lineTo( -shelfWidth+20, 20 );
+    	leftShelfShape.lineTo( 0, 20 );
     	leftShelfShape.lineTo( 0,0 );
 
     	var extrusionSettings = {
     	  size: 30, height: 4, curveSegments: 3,
     	  bevelThickness: 1, bevelSize: 2, bevelEnabled: false,
-    	  material: 0, extrudeMaterial: 1
+    	  material: 0, extrudeMaterial: 1,amount:260
     	};
 
     	var rightShelfGeom = new THREE.ExtrudeGeometry( rightShelfShape, extrusionSettings );
@@ -89,5 +89,17 @@ var ShelfManager = {
 
     renderProducts:function(shelf,data){
         moduleProduct.arrangeProduct(data, shelf);
+    },
+
+    createBanner:function(img,x){
+        var material = new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture(img)
+        });
+
+        // cube
+        var cube = new THREE.Mesh(new THREE.CubeGeometry(60, 30, 30), material);
+        cube.overdraw = true;
+        cube.position.set(x, 110, 30);
+        scene.add(cube);
     }
 }
