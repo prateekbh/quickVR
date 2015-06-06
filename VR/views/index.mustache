@@ -27,6 +27,7 @@
     <script src="/public/javascripts/js/OrbitControls.js"></script>
     <script src="/public/javascripts/js/helvetiker_regular.typeface.js"></script>
     <script src="/public/javascripts/js/ShelfManager.js"></script>
+    <script src="http://learningthreejs.com/data/THREEx/THREEx.DeviceOrientationState.js"></script>
     <script src="https://timezonedb.googlecode.com/files/timezonedb.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.6/zepto.min.js"></script>
     <script src="/public/javascripts/js/module_product.js"></script>
@@ -49,6 +50,9 @@
           currProdLabel,
           recognition,
           y=0,
+          initZ,
+          initX,
+          device,
           cart=[];
       var light,camera;
 
@@ -104,7 +108,7 @@
 
         animate();
         
-
+        // window.ondeviceorientation=tiltCallback;
         window.onkeydown=function(e){
           if(e.keyCode==38){
             moveForward();
@@ -122,48 +126,79 @@
 
         $.get("/api/browse?cid=beverages&pno=1",function(data){
           ShelfManager.makeShelf("beverages",data);
-          ShelfManager.createBanner("/public/images/personal_care1.png",50);
+          ShelfManager.createBanner("/public/images/beverages1.png",50);
           $.get("/api/browse?cid=branded food&pno=1",function(data){
             ShelfManager.makeShelf("branded food",data);
+            ShelfManager.createBanner("/public/images/branded_food1.png",230);
             $.get("/api/browse?cid=grocery & staples&pno=1",function(data){
               ShelfManager.makeShelf("grocery & staples",data);
+              ShelfManager.createBanner("/public/images/grocery&staples1.png",400);
             });
           });
         });
 
         displayLaserTag();
+        var lastResCount=0;
         recognition = new webkitSpeechRecognition();
-        recognition.grammars.addFromString("buy this")
-        recognition.grammars.addFromString("why this")
         recognition.continuous = true;
         recognition.interimResults=true;
         recognition.start();
 
-        recognition.onresult = function(event) {
+        recognition.onend=function(){
+          recognition.start();
+        }
 
+        recognition.onresult = function(event) {
           try{
-            var results=event.results;
-            for(var resIndex =0;resIndex<results.length;resIndex++){
-              var currRes=results[resIndex];
-              var speech=(currRes[0].transcript).trim();
-              
-              if ((speech == "buy this")||(speech == "why this")||(speech == "by this")){
-                if(currProd&&cart.indexOf(currProd.object.userData.title)==-1){
-                  var msg = new SpeechSynthesisUtterance(currProd.object.userData.title+ ' has been added to your cart.');
-                  msg.onend=function(){
-                    speechSynthesis.cancel();
+            var res=event.results;
+
+            for(var resIndex =0;resIndex<res.length;resIndex++){
+              if(resIndex>=lastResCount){
+                var currRes=res[resIndex];
+                var speech=(currRes[0].transcript).trim();
+                if ((speech == "buy this")||(speech == "why this")||(speech == "by this")){
+                  if(currProd&&cart.indexOf(currProd.object.userData.title)==-1){
+
+                    veronica_DS.speak(currProd.object.userData.title+ ' has been added to your cart.') ; 
+                    
                     cart.push(currProd.object.userData.title);
-                  }
-                  speechSynthesis.speak(msg);
-                  
+                    
+                  } 
                 }
-                
               }
             }
+            lastResCount=res.length;
           }
           catch(e){
+            console.log("FTA ",e);
             speechSynthesis.cancel()
           }
+        }
+
+        controls = new THREE.DeviceOrientationControls( camera );
+        controls.connect();
+      }
+
+      function tiltCallback(event){
+        //console.log("orientation gamma:", event.gamma, "beta", event.beta, "alpha", event.alpha);
+        if(!initZ){
+          initZ=event.alpha;
+          initX=event.gamma;
+        }
+        var threshold = 40;
+        if(event.gamma >40 && event.gamma <60) {
+          moveForward();
+        }
+        else if(event.gamma < -70 && event.gamma > -89) {
+          moveBackward();
+        }
+
+        else if(event.alpha < (initZ-threshold)) {
+            turnRight();
+        }
+
+        else if(event.alpha > (initZ+threshold)) {
+            turnLeft();
         }
       }
 
