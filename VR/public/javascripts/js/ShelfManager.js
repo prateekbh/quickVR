@@ -73,7 +73,7 @@ var ShelfManager = {
     	var leftShelfGeom = new THREE.ExtrudeGeometry( leftShelfShape, extrusionSettings );
 
             var materialFront = new THREE.MeshBasicMaterial( { color: 0x828283 } );
-            var materialSide = new THREE.MeshBasicMaterial( { color: 0xCACADC } );
+            var materialSide = new THREE.MeshBasicMaterial( { color: 0xFFCCBC } );
     	var materialArray = [ materialFront, materialSide ];
     	var shelfMaterial = new THREE.MeshFaceMaterial(materialArray);
 
@@ -97,7 +97,7 @@ var ShelfManager = {
         });
 
         // cube
-        var cube = new THREE.Mesh(new THREE.CubeGeometry(60, 30, 30), material);
+        var cube = new THREE.Mesh(new THREE.CubeGeometry(60, 30, 10), material);
         cube.overdraw = true;
         cube.position.set(x, 110, 30);
         scene.add(cube);
