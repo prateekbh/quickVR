@@ -72,8 +72,8 @@ var ShelfManager = {
     	var rightShelfGeom = new THREE.ExtrudeGeometry( rightShelfShape, extrusionSettings );
     	var leftShelfGeom = new THREE.ExtrudeGeometry( leftShelfShape, extrusionSettings );
 
-    	var materialFront = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-    	var materialSide = new THREE.MeshBasicMaterial( { color: 0xdddddd } );
+            var materialFront = new THREE.MeshBasicMaterial( { color: 0x828283 } );
+            var materialSide = new THREE.MeshBasicMaterial( { color: 0xCACADC } );
     	var materialArray = [ materialFront, materialSide ];
     	var shelfMaterial = new THREE.MeshFaceMaterial(materialArray);
 
