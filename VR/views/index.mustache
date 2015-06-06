@@ -226,11 +226,51 @@
         camera.add(chIcon);
         chIcon.position.set(0, 5, -50); 
       }
+      var i = 0,
+      text;
 
+      
       function showProductLabel(product,price){
-        
+        var prod = $("#prod_name");
+        if(product){
+          prod.html(product);
+          $("#price").html(price);
+          $(".ctr").show(); 
+        }else{
+          $(".ctr").hide();
+        }
+        // function type() {
+        //     text = product.slice(0, ++i);
+        //     if (text === product) return;
+        //     prod.html(text);
+        //     setTimeout(type, 10);
+        // }
+        // i = 0;
       }
 
     </script>
+    <style type="text/css">
+    .ctr{
+      color: #1ec503;
+      background-color: rgb(10, 6, 0);
+      position: absolute;
+      color: #02E148;
+      padding: 10px;
+      font-family: 'RobotoLight', 'Roboto-Light', "Droid Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      border-radius: 5px;
+      margin: 5px;
+      margin: 5px;
+      border: 1px dotted;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      -webkit-transform: translatez(0);
+    }
+
+    </style>
+    <div class="ctr" style="display:none;">
+      <div class="">product Name: <span id="prod_name"></span></div>
+      <div class="">Price: Rs. <span id="price"></span></div>
+    </div>
   </body>
 </html>
