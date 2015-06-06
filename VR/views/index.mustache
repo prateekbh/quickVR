@@ -47,7 +47,9 @@
           chIcon,
           currProd,
           currProdLabel,
-          y=0;
+          recognition,
+          y=0,
+          cart=[];
       var light,camera;
 
       var raycaster = new THREE.Raycaster();
@@ -130,7 +132,38 @@
         });
 
         displayLaserTag();
-        
+        recognition = new webkitSpeechRecognition();
+        recognition.grammars.addFromString("buy this")
+        recognition.grammars.addFromString("why this")
+        recognition.continuous = true;
+        recognition.interimResults=true;
+        recognition.start();
+
+        recognition.onresult = function(event) {
+          try{
+            var results=event.results;
+            for(var resIndex =0;resIndex<results.length;resIndex++){
+              var currRes=results[resIndex];
+              var speech=(currRes[0].transcript).trim();
+              
+              if ((speech == "buy this")||(speech == "why this")||(speech == "by this")){
+                if(currProd&&cart.indexOf(currProd.object.userData.title)==-1){
+                  var msg = new SpeechSynthesisUtterance(currProd.object.userData.title+ ' has been added to your cart.');
+                  msg.onend=function(){
+                    speechSynthesis.cancel();
+                    cart.push(currProd.object.userData.title);
+                  }
+                  speechSynthesis.speak(msg);
+                  
+                }
+                
+              }
+            }
+          }
+          catch(e){
+            speechSynthesis.cancel()
+          }
+        }
       }
 
       function moveForward() {
@@ -172,11 +205,6 @@
       function resize() {
         var width = container.offsetWidth;
         var height = container.offsetHeight;
-
-        // camera.aspect = width / height;
-        // camera.updateProjectionMatrix();
-
-        // renderer.setSize(width, height);
         effect.setSize(width, height);
       }
 
@@ -196,17 +224,27 @@
         var objs=raycaster.intersectObjects(scene.children);
         if(objs.length>0){
           try{
+
             var prod=objs[0];
             
             if(prod.object&&prod.object.userData&&prod.object.userData.fsn){
-              
+
               if((!currProd)||(currProd.object.userData.fsn!=prod.object.userData.fsn)){
+                try{
+                  currProd.object.material.color.set( 0xffffff );
+                  prod.object.material.color.set( 0xff0000 );  
+                }
+                catch(e){
+
+                }
+                
                 showProductLabel(prod.object.userData.title,"Rs. "+prod.object.userData.cost);  
+                currProd=prod;
               }
               
             }
 
-            currProd=prod;
+            
           }
           catch(e){
             console.log(e);
