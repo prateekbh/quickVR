@@ -140,6 +140,7 @@
         recognition.start();
 
         recognition.onresult = function(event) {
+
           try{
             var results=event.results;
             for(var resIndex =0;resIndex<results.length;resIndex++){
@@ -232,13 +233,13 @@
               if((!currProd)||(currProd.object.userData.fsn!=prod.object.userData.fsn)){
                 try{
                   currProd.object.material.color.set( 0xffffff );
-                  prod.object.material.color.set( 0xff0000 );  
+                  prod.object.material.color.set( 0xaaaaaa );  
                 }
                 catch(e){
 
                 }
                 
-                showProductLabel(prod.object.userData.title,"Rs. "+prod.object.userData.cost);  
+                showProductLabel(prod.object.userData.title,prod.object.userData.cost);  
                 currProd=prod;
               }
               
@@ -262,7 +263,7 @@
         var circleGeometry = new THREE.CircleGeometry( radius, segments ); 
         chIcon = new THREE.Line( circleGeometry, material );
         camera.add(chIcon);
-        chIcon.position.set(0, 5, -50); 
+        chIcon.position.set(0, 0, -50); 
       }
       var i = 0,
       text;
@@ -307,7 +308,7 @@
 
     </style>
     <div class="ctr" style="display:none;">
-      <div class="">product Name: <span id="prod_name"></span></div>
+      <div class="">Product Name: <span id="prod_name"></span></div>
       <div class="">Price: Rs. <span id="price"></span></div>
     </div>
   </body>
